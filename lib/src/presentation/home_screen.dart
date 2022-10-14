@@ -58,6 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.black,
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(80),
@@ -75,9 +76,25 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-            backgroundColor: Colors.black,
+            backgroundColor: Colors.transparent,
             elevation: 0.0,
             centerTitle: false,
+            actions: [
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.notifications,
+                  color: Colors.white,
+                ),
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.search,
+                  color: Colors.white,
+                ),
+              ),
+            ],
           ),
         ),
         floatingActionButton: FloatingActionButton(
@@ -89,86 +106,82 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           child: const Icon(Icons.refresh),
         ),
-        body: Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(50),
-                topRight: Radius.circular(50),
-              ),
-              color: Colors.white,
+        body: SingleChildScrollView(
+            child: Container(
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(50),
+              topRight: Radius.circular(50),
             ),
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: SingleChildScrollView(
-              child: StreamBuilder(
-                stream: dataStream,
-                builder: (context, AsyncSnapshot<String> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return SizedBox(
-                      height: MediaQuery.of(context).size.height / 1.3,
-                      child: const Center(
-                        child: CircularProgressIndicator(),
+            color: Colors.white,
+          ),
+          width: MediaQuery.of(context).size.width,
+          child: StreamBuilder(
+            stream: dataStream,
+            builder: (context, AsyncSnapshot<String> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
+              if (snapshot.hasData) {
+                var status = jsonDecode(snapshot.data!.split('#')[0]);
+                if (status == 200) {
+                  var data = jsonDecode(snapshot.data!.split('#')[1])['places']
+                      as List;
+                  return Column(
+                    children: [
+                      const SizedBox(
+                        height: 50.0,
                       ),
-                    );
-                  }
-                  if (snapshot.hasData) {
-                    var status = jsonDecode(snapshot.data!.split('#')[0]);
-                    if (status == 200) {
-                      var data =
-                          jsonDecode(snapshot.data!.split('#')[1])['places']
-                              as List;
-                      return Column(
-                        children: [
-                          const SizedBox(
-                            height: 50.0,
-                          ),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: data.length,
-                            itemBuilder: (context, index) {
-                              return LocationCard(
-                                locationID: data[index]['id'].toString(),
-                                locationName: data[index]['place_name'],
-                                longitude:
-                                    double.parse(data[index]['x_coordinate']),
-                                latitude:
-                                    double.parse(data[index]['y_coordinate']),
-                                locationImage:
-                                    'assets/images/location-pic1.jpeg',
-                              );
-                            },
-                          ),
-                        ],
-                      );
-                    }
-                    if (status == 401) {
-                      return SizedBox(
-                        height: MediaQuery.of(context).size.height / 1.3,
-                        child: const Center(
-                          child: NoDataCard(
-                            message: 'No locations added yet!',
-                          ),
-                        ),
-                      );
-                    } else {
-                      return SizedBox(
-                        height: MediaQuery.of(context).size.height / 1.3,
-                        child: const Center(
-                          child: ServerErrorCard(),
-                        ),
-                      );
-                    }
-                  } else {
-                    return SizedBox(
-                      height: MediaQuery.of(context).size.height / 1.3,
-                      child: const Center(
-                        child: NetworkErrorCard(),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: data.length,
+                        itemBuilder: (context, index) {
+                          return LocationCard(
+                            locationID: data[index]['id'].toString(),
+                            locationName: data[index]['place_name'],
+                            longitude:
+                                double.parse(data[index]['x_coordinate']),
+                            latitude: double.parse(data[index]['y_coordinate']),
+                            locationImage: 'assets/images/location-pic1.jpeg',
+                          );
+                        },
                       ),
-                    );
-                  }
-                },
-              ),
-            )));
+                    ],
+                  );
+                }
+                if (status == 401) {
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    child: const Center(
+                      child: NoDataCard(
+                        message: 'No locations added yet!',
+                      ),
+                    ),
+                  );
+                } else {
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    child: const Center(
+                      child: ServerErrorCard(),
+                    ),
+                  );
+                }
+              } else {
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: const Center(
+                    child: NetworkErrorCard(),
+                  ),
+                );
+              }
+            },
+          ),
+        )));
   }
 }
