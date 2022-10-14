@@ -61,7 +61,7 @@ class _LocationCardState extends State<LocationCard> {
                         child: Text(
                           widget.locationName,
                           style: const TextStyle(
-                            color: Colors.black,
+                            color: Colors.black54,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
