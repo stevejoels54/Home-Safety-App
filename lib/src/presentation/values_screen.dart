@@ -5,31 +5,44 @@ import 'dart:convert';
 import '../widgets/custom_appbar.dart';
 import '../widgets/drawer.dart';
 import '../widgets/bottom_appbar.dart';
-import '../widgets/custom_card.dart';
+import '../widgets/values_cards.dart';
+import '../widgets/no_data.dart';
+import '../widgets/server_error.dart';
 import 'dart:io';
 
 class ValuesScreen extends StatefulWidget {
-  const ValuesScreen({super.key});
+  final String locationID;
+  final String placename;
+  const ValuesScreen({
+    Key? key,
+    required this.locationID,
+    required this.placename,
+  }) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
-  _ValuesWidgetState createState() => _ValuesWidgetState();
+  State<ValuesScreen> createState() => _ValuesScreenState();
 }
 
-class _ValuesWidgetState extends State<ValuesScreen> {
-  bool _running = true;
+class _ValuesScreenState extends State<ValuesScreen> {
+  late Stream<String> dataStream;
+  final bool _running = true;
   var setData = {'temperature': 0.0, 'lpg': 0.0, 'smoke': 0.0};
 
+  @override
+  void initState() {
+    super.initState();
+    dataStream = getData();
+  }
+
   Stream<String> getData() async* {
-    var url =
-        Uri.parse('https://home-safety-backend.herokuapp.com/sensorData/');
+    var url = Uri.parse(
+        'https://home-safety-backend.herokuapp.com/sensor_data/${widget.locationID}');
     while (_running) {
       try {
         var response = await http.get(url);
         await Future<void>.delayed(const Duration(seconds: 1));
         yield "${response.statusCode}#${response.body}";
       } on SocketException catch (_) {
-        showSnackBar();
         yield "404#No Internet Connection";
       }
     }
@@ -42,7 +55,7 @@ class _ValuesWidgetState extends State<ValuesScreen> {
         label: 'Refresh',
         onPressed: () {
           setState(() {
-            _running = !_running;
+            dataStream = getData();
           });
           // Some code to undo the change.
         },
@@ -56,14 +69,16 @@ class _ValuesWidgetState extends State<ValuesScreen> {
     return Scaffold(
       appBar: const CustomAppBar(title: "Welcome home, Steve!"),
       drawer: const AppDrawer(),
-      bottomNavigationBar: const BottomAppbar(),
+      bottomNavigationBar: BottomAppbar(
+        locationID: widget.locationID,
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.black,
         onPressed: () {
           setState(() {
-            _running = !_running;
+            dataStream = getData();
           });
         },
         child: const Icon(Icons.refresh),
@@ -71,7 +86,7 @@ class _ValuesWidgetState extends State<ValuesScreen> {
       body: Center(
           child: SingleChildScrollView(
         child: StreamBuilder(
-          stream: getData(),
+          stream: dataStream,
           builder: (context, AsyncSnapshot<String> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
@@ -87,90 +102,49 @@ class _ValuesWidgetState extends State<ValuesScreen> {
                   'lpg': data['lpg'],
                   'smoke': data['smoke']
                 };
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    CustomCard(
-                      title: "TEMPERATURE",
-                      icon: Icons.thermostat_rounded,
-                      value: "${data['temperature']}",
-                      unit: "°C",
-                      color: Colors.yellow,
-                    ),
-                    // lpg card
-                    CustomCard(
-                      title: "LPG",
-                      icon: Icons.gas_meter_rounded,
-                      value: "${data['lpg']}",
-                      unit: "%",
-                      color: Colors.red,
-                    ),
-                    // smoke card
-                    CustomCard(
-                      title: "SMOKE",
-                      icon: Icons.air_rounded,
-                      value: "${data['smoke']}",
-                      unit: "%",
-                      color: Colors.orange,
-                    ),
-                  ],
+                return ValuesCards(
+                  temperature: "${data['temperature']}",
+                  lpg: "${data['lpg']}",
+                  smoke: "${data['smoke']}",
+                  placename: widget.placename,
+                );
+              }
+              if (status == 401) {
+                return const NoDataCard(
+                  message:
+                      "No data available for this location. Please add data to this location.",
                 );
               } else {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    CustomCard(
-                      title: "TEMPERATURE",
-                      icon: Icons.thermostat_rounded,
-                      value: "${setData['temperature']}",
-                      unit: "°C",
-                      color: Colors.yellow,
-                    ),
-                    // lpg card
-                    CustomCard(
-                      title: "LPG",
-                      icon: Icons.gas_meter_rounded,
-                      value: "${setData['lpg']}",
-                      unit: "%",
-                      color: Colors.red,
-                    ),
-                    // smoke card
-                    CustomCard(
-                      title: "SMOKE",
-                      icon: Icons.air_rounded,
-                      value: "${setData['smoke']}",
-                      unit: "%",
-                      color: Colors.orange,
-                    ),
-                  ],
-                );
+                return const ServerErrorCard();
               }
             } else {
               return Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  CustomCard(
-                    title: "TEMPERATURE",
-                    icon: Icons.thermostat_rounded,
-                    value: "${setData['temperature']}",
-                    unit: "°C",
-                    color: Colors.yellow,
+                  Container(
+                    width: 280,
+                    height: 25,
+                    decoration: BoxDecoration(
+                        color: const Color(0xFFF8D7DA),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: const Center(
+                      child: Text(
+                        "Network Error, try refreshing!",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Colors.redAccent,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
                   ),
-                  // lpg card
-                  CustomCard(
-                    title: "LPG",
-                    icon: Icons.gas_meter_rounded,
-                    value: "${setData['lpg']}",
-                    unit: "%",
-                    color: Colors.red,
+                  const SizedBox(
+                    height: 20,
                   ),
-                  // smoke card
-                  CustomCard(
-                    title: "SMOKE",
-                    icon: Icons.air_rounded,
-                    value: "${setData['smoke']}",
-                    unit: "%",
-                    color: Colors.orange,
+                  ValuesCards(
+                    temperature: "${setData['temperature']}",
+                    lpg: "${setData['lpg']}",
+                    smoke: "${setData['smoke']}",
+                    placename: widget.placename,
                   ),
                 ],
               );
