@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../presentation/home_screen.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -8,11 +9,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }) : super(key: key);
 
   @override
-  Size get preferredSize => const Size.fromHeight(90);
+  Size get preferredSize => const Size.fromHeight(40);
   // ignore: annotate_overrides
   Widget build(BuildContext context) {
     return AppBar(
-      elevation: 6,
+      elevation: 0,
       shape: ShapeBorder.lerp(
         const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
@@ -26,22 +27,21 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         0,
       ),
-      bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(0),
-          child: Text(title,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ))),
-
-      //title: Text(title),
       automaticallyImplyLeading: true,
-      iconTheme: const IconThemeData(color: Colors.white),
+      iconTheme: const IconThemeData(color: Colors.black),
       actions: [
-        IconButton(onPressed: () {}, icon: const Icon(Icons.home)),
+        IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HomeScreen(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.home)),
       ],
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.transparent,
     );
   }
 }

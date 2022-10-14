@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+// import '../presentation/values_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -22,7 +23,7 @@ class _FormWidgetState extends State<LoginScreen> {
     //encode Map to JSON
     var body = json.encode(data);
 
-    var url = Uri.http('localhost:8000', '/login/');
+    var url = Uri.parse('https://home-safety-backend.herokuapp.com/login/');
     bool success = false;
     var response = await http.post(url, body: body);
 
@@ -39,7 +40,7 @@ class _FormWidgetState extends State<LoginScreen> {
     return Container(
         decoration: const BoxDecoration(
             image: DecorationImage(
-          image: AssetImage('assets/images/hotel-pic-2.jpeg'),
+          image: AssetImage('assets/images/home-pic4.jpeg'),
           fit: BoxFit.cover,
         )),
         child: Scaffold(
@@ -51,7 +52,7 @@ class _FormWidgetState extends State<LoginScreen> {
                 height: 150,
                 child: Center(
                   child: Text(
-                    'Hotel plus',
+                    'Home Safety System',
                     style: GoogleFonts.nunitoSans(
                       fontSize: 25,
                       fontWeight: FontWeight.normal,
@@ -61,7 +62,7 @@ class _FormWidgetState extends State<LoginScreen> {
                 ),
               ),
               const SizedBox(
-                height: 60,
+                height: 150,
               ),
               //Email Input field (container)
               Container(
@@ -121,7 +122,7 @@ class _FormWidgetState extends State<LoginScreen> {
               Column(
                 children: [
                   const SizedBox(
-                    height: 80,
+                    height: 100,
                   ),
                   Container(
                       width: double.infinity,
@@ -144,7 +145,7 @@ class _FormWidgetState extends State<LoginScreen> {
                               });
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.deepPurpleAccent,
+                          backgroundColor: const Color(0xFF8043F9),
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(10)),

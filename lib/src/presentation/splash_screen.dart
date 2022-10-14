@@ -1,7 +1,8 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'values_screen.dart';
+//import '../presentation/login_screen.dart';
+import '../presentation/home_screen.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -22,7 +23,7 @@ class SplashScreen extends StatelessWidget {
         ],
       ),
       backgroundColor: Colors.black,
-      nextScreen: const ValuesScreen(),
+      nextScreen: const HomeScreen(),
       splashIconSize: 200,
       splashTransition: SplashTransition.slideTransition,
       duration: 4000,

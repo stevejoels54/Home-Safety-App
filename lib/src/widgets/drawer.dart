@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+//import '../presentation/login_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({
@@ -10,7 +11,6 @@ class AppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       backgroundColor: Colors.white,
-      //width: 200,
       child: ListView(
         // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
