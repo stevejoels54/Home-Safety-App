@@ -142,7 +142,7 @@ class _GraphScreenState extends State<GraphScreen> {
                       );
                     } else {
                       return SizedBox(
-                        height: MediaQuery.of(context).size.height / 1.3,
+                        height: MediaQuery.of(context).size.height,
                         child: const Center(
                           child: ServerErrorCard(),
                         ),
@@ -150,7 +150,7 @@ class _GraphScreenState extends State<GraphScreen> {
                     }
                   } else {
                     return SizedBox(
-                      height: MediaQuery.of(context).size.height / 1.3,
+                      height: MediaQuery.of(context).size.height,
                       child: const Center(
                         child: NetworkErrorCard(),
                       ),
