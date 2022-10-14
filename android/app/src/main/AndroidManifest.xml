@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.home_safety_app">
+    <uses-permission android:name="android.permission.INTERNET" />
    <application
         android:label="home_safety_app"
         android:name="${applicationName}"
@@ -19,6 +20,8 @@
             <meta-data
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
+              android:name="com.google.android.geo.API_KEY"
+              android:value="AIzaSyAP0nRT7Qirl4Ygo7YfP0aoAAtrQQ_hMgY"
               />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
