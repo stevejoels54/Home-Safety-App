@@ -7,6 +7,7 @@ import '../widgets/location_card.dart';
 import '../widgets/no_data.dart';
 import '../widgets/server_error.dart';
 import '../widgets/network_error.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -19,6 +20,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late Stream<String> dataStream;
+
+  String date = DateFormat('EEEE, MMM d, yyyy').format(DateTime.now());
 
   @override
   void initState() {
@@ -65,13 +68,24 @@ class _HomeScreenState extends State<HomeScreen> {
           child: AppBar(
             title: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: const [
-                Text(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
                   'Hey, Steve!',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Text(
+                    date,
+                    style: const TextStyle(
+                      color: Colors.white54,
+                      fontSize: 15,
+                    ),
                   ),
                 ),
               ],
@@ -133,9 +147,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   var data = jsonDecode(snapshot.data!.split('#')[1])['places']
                       as List;
                   return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(
-                        height: 50.0,
+                        height: 25.0,
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Text(
+                          'Available Locations',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                       ListView.builder(
                         shrinkWrap: true,
