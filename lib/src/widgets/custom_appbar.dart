@@ -9,26 +9,26 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }) : super(key: key);
 
   @override
-  Size get preferredSize => const Size.fromHeight(40);
+  Size get preferredSize => const Size.fromHeight(80);
   // ignore: annotate_overrides
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
-      shape: ShapeBorder.lerp(
-        const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(30),
-          ),
-        ),
-        const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(30),
-          ),
-        ),
-        0,
-      ),
+      // shape: ShapeBorder.lerp(
+      //   const RoundedRectangleBorder(
+      //     borderRadius: BorderRadius.vertical(
+      //       bottom: Radius.circular(30),
+      //     ),
+      //   ),
+      //   const RoundedRectangleBorder(
+      //     borderRadius: BorderRadius.vertical(
+      //       bottom: Radius.circular(30),
+      //     ),
+      //   ),
+      //   0,
+      // ),
       automaticallyImplyLeading: true,
-      iconTheme: const IconThemeData(color: Colors.black),
+      iconTheme: const IconThemeData(color: Colors.white),
       actions: [
         IconButton(
             onPressed: () {
@@ -41,7 +41,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             },
             icon: const Icon(Icons.home)),
       ],
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.black,
     );
   }
 }

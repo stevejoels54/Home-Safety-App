@@ -14,14 +14,14 @@ class BottomAppbar extends StatelessWidget {
       //color: const Color(0xFF000080),
       color: Colors.black,
       elevation: 5,
-      notchMargin: 10,
+      //notchMargin: 10,
       shape: const CircularNotchedRectangle(),
       child: IconTheme(
         data: const IconThemeData(color: Colors.white, size: 36),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
                   onPressed: () {
