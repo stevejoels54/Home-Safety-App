@@ -28,7 +28,6 @@ class _ValuesCardsState extends State<ValuesCards> {
           icon: Icons.thermostat_rounded,
           value: widget.temperature,
           unit: "°C",
-          color: Colors.yellow,
           placename: widget.placename,
         ),
         // lpg card
@@ -37,7 +36,6 @@ class _ValuesCardsState extends State<ValuesCards> {
           icon: Icons.gas_meter_rounded,
           value: widget.lpg,
           unit: "%",
-          color: Colors.orange,
           placename: widget.placename,
         ),
         // smoke card
@@ -46,7 +44,6 @@ class _ValuesCardsState extends State<ValuesCards> {
           icon: Icons.air_rounded,
           value: widget.smoke,
           unit: "%",
-          color: Colors.green,
           placename: widget.placename,
         ),
       ],

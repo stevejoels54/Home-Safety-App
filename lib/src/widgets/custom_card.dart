@@ -6,7 +6,6 @@ class CustomCard extends StatelessWidget {
   final String title;
   final String value;
   final String unit;
-  final Color color;
   final String placename;
   const CustomCard(
       {Key? key,
@@ -14,7 +13,6 @@ class CustomCard extends StatelessWidget {
       required this.title,
       required this.value,
       required this.unit,
-      required this.color,
       required this.placename})
       : super(key: key);
 
@@ -124,7 +122,7 @@ class CustomCard extends StatelessWidget {
                                         ? Colors.green
                                         : (((double.parse(value) > 25) &&
                                                 (double.parse(value) <= 35))
-                                            ? Colors.orangeAccent
+                                            ? Colors.orange
                                             : ((double.parse(value) > 35)
                                                 ? Colors.redAccent
                                                 : Colors.blueAccent)))
@@ -134,7 +132,7 @@ class CustomCard extends StatelessWidget {
                                             ? Colors.green
                                             : ((double.parse(value) >= 11) &&
                                                     (double.parse(value) <= 20))
-                                                ? Colors.orangeAccent
+                                                ? Colors.orange
                                                 : Colors.redAccent)
                                         : title == "SMOKE"
                                             ? (((double.parse(value) >= 0) &&
@@ -144,7 +142,7 @@ class CustomCard extends StatelessWidget {
                                                             11) &&
                                                         (double.parse(value) <=
                                                             20))
-                                                    ? Colors.orangeAccent
+                                                    ? Colors.orange
                                                     : Colors.redAccent)
                                             : Colors
                                                 .blueAccent, //Colors.green[700],
@@ -179,7 +177,33 @@ class CustomCard extends StatelessWidget {
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         )),
-                    progressColor: color,
+                    progressColor: title == "TEMPERATURE"
+                        ? (((double.parse(value) >= 15) &&
+                                (double.parse(value) <= 25))
+                            ? Colors.green
+                            : (((double.parse(value) > 25) &&
+                                    (double.parse(value) <= 35))
+                                ? Colors.orange
+                                : ((double.parse(value) > 35)
+                                    ? Colors.redAccent
+                                    : Colors.blueAccent)))
+                        : title == "LPG"
+                            ? (((double.parse(value) >= 0) &&
+                                    (double.parse(value) <= 10))
+                                ? Colors.green
+                                : ((double.parse(value) >= 11) &&
+                                        (double.parse(value) <= 20))
+                                    ? Colors.orange
+                                    : Colors.redAccent)
+                            : title == "SMOKE"
+                                ? (((double.parse(value) >= 0) &&
+                                        (double.parse(value) <= 10))
+                                    ? Colors.green
+                                    : ((double.parse(value) >= 11) &&
+                                            (double.parse(value) <= 20))
+                                        ? Colors.orange
+                                        : Colors.redAccent)
+                                : Colors.blueAccent,
                   ),
                 ),
               ],

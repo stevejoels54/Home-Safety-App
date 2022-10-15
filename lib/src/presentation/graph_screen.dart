@@ -41,36 +41,47 @@ class _GraphScreenState extends State<GraphScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.black),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(
-              right: 20.0,
-            ),
-            child: GestureDetector(
-              onTap: () => setState(() {
-                dataStream = getData();
-              }),
-              child: const Icon(
-                Icons.refresh,
-                size: 26.0,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(80),
+        child: AppBar(
+          iconTheme: const IconThemeData(color: Colors.white),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(
+                right: 20.0,
+              ),
+              child: GestureDetector(
+                onTap: () => setState(() {
+                  dataStream = getData();
+                }),
+                child: const Icon(
+                  Icons.refresh,
+                  size: 26.0,
+                ),
               ),
             ),
-          ),
-        ],
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        title: Text(widget.title,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
-            )),
+          ],
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          title: Text(widget.title,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              )),
+        ),
       ),
-      backgroundColor: Colors.white,
-      body: Center(
+      backgroundColor: Colors.black,
+      body: Container(
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(50),
+            topRight: Radius.circular(50),
+          ),
+          color: Colors.white,
+        ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(
               height: 50.0,
