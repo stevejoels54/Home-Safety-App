@@ -9,6 +9,7 @@ import '../widgets/values_cards.dart';
 import '../widgets/no_data.dart';
 import '../widgets/server_error.dart';
 import 'dart:io';
+import 'package:intl/intl.dart';
 
 class ValuesScreen extends StatefulWidget {
   final String locationID;
@@ -27,6 +28,8 @@ class _ValuesScreenState extends State<ValuesScreen> {
   late Stream<String> dataStream;
   final bool _running = true;
   var setData = {'temperature': 0.0, 'lpg': 0.0, 'smoke': 0.0};
+
+  String date = DateFormat('EEEE, MMM d, yyyy').format(DateTime.now());
 
   @override
   void initState() {
@@ -67,91 +70,133 @@ class _ValuesScreenState extends State<ValuesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: "Welcome home, Steve!"),
-      drawer: const AppDrawer(),
-      bottomNavigationBar: BottomAppbar(
-        locationID: widget.locationID,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      backgroundColor: Colors.white,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.black,
-        onPressed: () {
-          setState(() {
-            dataStream = getData();
-          });
-        },
-        child: const Icon(Icons.refresh),
-      ),
-      body: Center(
-          child: SingleChildScrollView(
-        child: StreamBuilder(
-          stream: dataStream,
-          builder: (context, AsyncSnapshot<String> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
-            }
-            if (snapshot.hasData) {
-              var status = jsonDecode(snapshot.data!.split('#')[0]);
-              if (status == 200) {
-                var data =
-                    jsonDecode(snapshot.data!.split('#')[1])['sensorData'];
-
-                setData = {
-                  'temperature': data['temperature'],
-                  'lpg': data['lpg'],
-                  'smoke': data['smoke']
-                };
-                return ValuesCards(
-                  temperature: "${data['temperature']}",
-                  lpg: "${data['lpg']}",
-                  smoke: "${data['smoke']}",
-                  placename: widget.placename,
-                );
-              }
-              if (status == 401) {
-                return const NoDataCard(
-                  message:
-                      "No data available for this location. Please add data to this location.",
-                );
-              } else {
-                return const ServerErrorCard();
-              }
-            } else {
-              return Column(
-                children: [
-                  Container(
-                    width: 280,
-                    height: 25,
-                    decoration: BoxDecoration(
-                        color: const Color(0xFFF8D7DA),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: const Center(
-                      child: Text(
-                        "Network Error, try refreshing!",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Colors.redAccent,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  ValuesCards(
-                    temperature: "${setData['temperature']}",
-                    lpg: "${setData['lpg']}",
-                    smoke: "${setData['smoke']}",
-                    placename: widget.placename,
-                  ),
-                ],
-              );
-            }
-          },
+        appBar: const CustomAppBar(title: "Welcome home, Steve!"),
+        drawer: const AppDrawer(),
+        bottomNavigationBar: BottomAppbar(
+          locationID: widget.locationID,
         ),
-      )),
-    );
+        //floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+        backgroundColor: Colors.black,
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.black,
+          onPressed: () {
+            setState(() {
+              dataStream = getData();
+            });
+          },
+          child: const Icon(Icons.refresh),
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(50),
+                topRight: Radius.circular(50),
+              ),
+              color: Colors.white,
+            ),
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: StreamBuilder(
+              stream: dataStream,
+              builder: (context, AsyncSnapshot<String> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                }
+                if (snapshot.hasData) {
+                  var status = jsonDecode(snapshot.data!.split('#')[0]);
+                  if (status == 200) {
+                    var data =
+                        jsonDecode(snapshot.data!.split('#')[1])['sensorData'];
+
+                    setData = {
+                      'temperature': data['temperature'],
+                      'lpg': data['lpg'],
+                      'smoke': data['smoke']
+                    };
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Real-time Data',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 23,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Text(
+                            date,
+                            style: const TextStyle(
+                              color: Colors.black54,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        ValuesCards(
+                          temperature: "${data['temperature']}",
+                          lpg: "${data['lpg']}",
+                          smoke: "${data['smoke']}",
+                          placename: widget.placename,
+                        ),
+                      ],
+                    );
+                  }
+                  if (status == 401) {
+                    return const NoDataCard(
+                      message:
+                          "No data available for this location. Please add data to this location.",
+                    );
+                  } else {
+                    return const ServerErrorCard();
+                  }
+                } else {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 280,
+                        height: 25,
+                        decoration: BoxDecoration(
+                            color: const Color(0xFFF8D7DA),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: const Center(
+                          child: Text(
+                            "Network Error, try refreshing!",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.redAccent,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      ValuesCards(
+                        temperature: "${setData['temperature']}",
+                        lpg: "${setData['lpg']}",
+                        smoke: "${setData['smoke']}",
+                        placename: widget.placename,
+                      ),
+                    ],
+                  );
+                }
+              },
+            ),
+          ),
+        ));
   }
 }

@@ -23,27 +23,48 @@ class _MapState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Maps'),
         backgroundColor: Colors.black,
-        elevation: 0.0,
-      ),
-      body: GoogleMap(
-        mapType: MapType.normal,
-        markers: {
-          Marker(
-            markerId: MarkerId(widget.placename),
-            position: LatLng(widget.latitude, widget.longitude),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(80),
+          child: AppBar(
+            title: const Text('Maps',
+                style: TextStyle(
+                  color: Colors.white,
+                )),
+            backgroundColor: Colors.transparent,
+            elevation: 0.0,
           ),
-        },
-        initialCameraPosition: CameraPosition(
-          target: LatLng(widget.latitude, widget.longitude),
-          zoom: 14.0,
         ),
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
-      ),
-    );
+        body: Container(
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(50),
+              topRight: Radius.circular(50),
+            ),
+            color: Colors.white,
+          ),
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: GoogleMap(
+            mapType: MapType.normal,
+            markers: {
+              Marker(
+                markerId: MarkerId(widget.placename),
+                position: LatLng(widget.latitude, widget.longitude),
+                infoWindow: InfoWindow(
+                  title: widget.placename,
+                ),
+              ),
+            },
+            initialCameraPosition: const CameraPosition(
+              target: LatLng(1.5318480528729033, 32.322001370741745),
+              zoom: 6.6,
+            ),
+            onMapCreated: (GoogleMapController controller) {
+              _controller.complete(controller);
+            },
+          ),
+        ));
   }
 }
+//1.5318480528729033, 32.322001370741745 Uganda coordinates
