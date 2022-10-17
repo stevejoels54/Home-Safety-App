@@ -9,7 +9,6 @@ import '../widgets/values_cards.dart';
 import '../widgets/no_data.dart';
 import '../widgets/server_error.dart';
 import 'dart:io';
-import 'package:intl/intl.dart';
 
 class ValuesScreen extends StatefulWidget {
   final String locationID;
@@ -28,8 +27,6 @@ class _ValuesScreenState extends State<ValuesScreen> {
   late Stream<String> dataStream;
   final bool _running = true;
   var setData = {'temperature': 0.0, 'lpg': 0.0, 'smoke': 0.0};
-
-  String date = DateFormat('EEEE, MMM d, yyyy').format(DateTime.now());
 
   @override
   void initState() {
@@ -119,38 +116,13 @@ class _ValuesScreenState extends State<ValuesScreen> {
                       'lpg': data['lpg'],
                       'smoke': data['smoke']
                     };
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Real-time Data',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 23,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10),
-                          child: Text(
-                            date,
-                            style: const TextStyle(
-                              color: Colors.black54,
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        ValuesCards(
-                          temperature: "${data['temperature']}",
-                          lpg: "${data['lpg']}",
-                          smoke: "${data['smoke']}",
-                          placename: widget.placename,
-                        ),
-                      ],
+
+                    return ValuesCards(
+                      temperature: "${setData['temperature']}",
+                      lpg: "${setData['lpg']}",
+                      smoke: "${setData['smoke']}",
+                      placename: widget.placename,
+                      networkError: "false",
                     );
                   }
                   if (status == 401) {
@@ -162,36 +134,12 @@ class _ValuesScreenState extends State<ValuesScreen> {
                     return const ServerErrorCard();
                   }
                 } else {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 280,
-                        height: 25,
-                        decoration: BoxDecoration(
-                            color: const Color(0xFFF8D7DA),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: const Center(
-                          child: Text(
-                            "Network Error, try refreshing!",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.redAccent,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      ValuesCards(
-                        temperature: "${setData['temperature']}",
-                        lpg: "${setData['lpg']}",
-                        smoke: "${setData['smoke']}",
-                        placename: widget.placename,
-                      ),
-                    ],
+                  return ValuesCards(
+                    temperature: "${setData['temperature']}",
+                    lpg: "${setData['lpg']}",
+                    smoke: "${setData['smoke']}",
+                    placename: widget.placename,
+                    networkError: "true",
                   );
                 }
               },

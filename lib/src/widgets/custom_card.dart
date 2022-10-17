@@ -16,6 +16,52 @@ class CustomCard extends StatelessWidget {
       required this.placename})
       : super(key: key);
 
+// functions that return the color based on the value
+
+  Color getDarkColor() {
+    if (title == "TEMPERATURE") {
+      if ((double.parse(value) >= 15) && (double.parse(value) <= 25)) {
+        return Colors.green;
+      } else if ((double.parse(value) > 25) && (double.parse(value) <= 35)) {
+        return Colors.orange;
+      } else if (double.parse(value) > 35) {
+        return Colors.red;
+      } else {
+        return Colors.blue;
+      }
+    } else {
+      if (double.parse(value) >= 0 && double.parse(value) <= 10) {
+        return Colors.green;
+      } else if (double.parse(value) > 10 && double.parse(value) <= 20) {
+        return Colors.orange;
+      } else {
+        return Colors.red;
+      }
+    }
+  }
+
+  Color getLightColor() {
+    if (title == "TEMPERATURE") {
+      if ((double.parse(value) >= 15) && (double.parse(value) <= 25)) {
+        return const Color(0xFFD4EDDA);
+      } else if ((double.parse(value) > 25) && (double.parse(value) <= 35)) {
+        return const Color(0xFFFFF3CD);
+      } else if (double.parse(value) > 35) {
+        return const Color(0xFFF8D7DA);
+      } else {
+        return const Color(0xFFCCE5FF);
+      }
+    } else {
+      if (double.parse(value) >= 0 && double.parse(value) <= 10) {
+        return const Color(0xFFD4EDDA);
+      } else if (double.parse(value) > 10 && double.parse(value) <= 20) {
+        return const Color(0xFFFFF3CD);
+      } else {
+        return const Color(0xFFF8D7DA);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -27,15 +73,13 @@ class CustomCard extends StatelessWidget {
       ),
       color: Colors.white,
       child: Container(
-        height: 180,
-        width: 300,
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(
             Radius.circular(20),
           ),
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ListTile(
               leading: Icon(icon, color: Colors.black, size: 30),
@@ -47,43 +91,18 @@ class CustomCard extends StatelessWidget {
                   )),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Column(
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 10),
                       child: Container(
-                        width: 100,
-                        height: 25,
+                        width: MediaQuery.of(context).size.width * 0.3,
+                        height: MediaQuery.of(context).size.height * 0.033,
                         decoration: BoxDecoration(
-                            color: title == "TEMPERATURE"
-                                ? (((double.parse(value) >= 15) &&
-                                        (double.parse(value) <= 25))
-                                    ? const Color(0xFFD4EDDA)
-                                    : (((double.parse(value) > 25) &&
-                                            (double.parse(value) <= 35))
-                                        ? const Color(0xFFFFF3CD)
-                                        : ((double.parse(value) > 35)
-                                            ? const Color(0xFFF8D7DA)
-                                            : const Color(0xFFCCE5FF))))
-                                : title == "LPG"
-                                    ? (((double.parse(value) >= 0) &&
-                                            (double.parse(value) <= 10))
-                                        ? const Color(0xFFD4EDDA)
-                                        : ((double.parse(value) >= 11) &&
-                                                (double.parse(value) <= 20))
-                                            ? const Color(0xFFFFF3CD)
-                                            : const Color(0xFFF8D7DA))
-                                    : title == "SMOKE"
-                                        ? (((double.parse(value) >= 0) &&
-                                                (double.parse(value) <= 10))
-                                            ? const Color(0xFFD4EDDA)
-                                            : ((double.parse(value) >= 11) &&
-                                                    (double.parse(value) <= 20))
-                                                ? const Color(0xFFFFF3CD)
-                                                : const Color(0xFFF8D7DA))
-                                        : const Color(0xFFCCE5FF),
+                            color: getLightColor(),
                             borderRadius: BorderRadius.circular(20)),
                         child: Center(
                           child: Text(
@@ -116,36 +135,7 @@ class CustomCard extends StatelessWidget {
                                         : "No Data",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                color: title == "TEMPERATURE"
-                                    ? (((double.parse(value) >= 15) &&
-                                            (double.parse(value) <= 25))
-                                        ? Colors.green
-                                        : (((double.parse(value) > 25) &&
-                                                (double.parse(value) <= 35))
-                                            ? Colors.orange
-                                            : ((double.parse(value) > 35)
-                                                ? Colors.redAccent
-                                                : Colors.blueAccent)))
-                                    : title == "LPG"
-                                        ? (((double.parse(value) >= 0) &&
-                                                (double.parse(value) <= 10))
-                                            ? Colors.green
-                                            : ((double.parse(value) >= 11) &&
-                                                    (double.parse(value) <= 20))
-                                                ? Colors.orange
-                                                : Colors.redAccent)
-                                        : title == "SMOKE"
-                                            ? (((double.parse(value) >= 0) &&
-                                                    (double.parse(value) <= 10))
-                                                ? Colors.green
-                                                : ((double.parse(value) >=
-                                                            11) &&
-                                                        (double.parse(value) <=
-                                                            20))
-                                                    ? Colors.orange
-                                                    : Colors.redAccent)
-                                            : Colors
-                                                .blueAccent, //Colors.green[700],
+                                color: getDarkColor(),
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold),
                           ),
@@ -165,45 +155,22 @@ class CustomCard extends StatelessWidget {
                   ],
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 10),
+                  padding: const EdgeInsets.all(28),
                   child: CircularPercentIndicator(
-                    radius: 60,
-                    lineWidth: 11,
+                    radius: 65,
+                    lineWidth: 12,
+                    circularStrokeCap: CircularStrokeCap.round,
+                    backgroundColor: getLightColor(),
+                    animation: true,
                     percent: (double.parse(value) / 100),
                     center: Text(
                         "${double.parse(value).toStringAsFixed(1)}" "$unit",
-                        style: const TextStyle(
-                          color: Color(0xFF007BFF),
+                        style: TextStyle(
+                          color: getDarkColor(),
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         )),
-                    progressColor: title == "TEMPERATURE"
-                        ? (((double.parse(value) >= 15) &&
-                                (double.parse(value) <= 25))
-                            ? Colors.green
-                            : (((double.parse(value) > 25) &&
-                                    (double.parse(value) <= 35))
-                                ? Colors.orange
-                                : ((double.parse(value) > 35)
-                                    ? Colors.redAccent
-                                    : Colors.blueAccent)))
-                        : title == "LPG"
-                            ? (((double.parse(value) >= 0) &&
-                                    (double.parse(value) <= 10))
-                                ? Colors.green
-                                : ((double.parse(value) >= 11) &&
-                                        (double.parse(value) <= 20))
-                                    ? Colors.orange
-                                    : Colors.redAccent)
-                            : title == "SMOKE"
-                                ? (((double.parse(value) >= 0) &&
-                                        (double.parse(value) <= 10))
-                                    ? Colors.green
-                                    : ((double.parse(value) >= 11) &&
-                                            (double.parse(value) <= 20))
-                                        ? Colors.orange
-                                        : Colors.redAccent)
-                                : Colors.blueAccent,
+                    progressColor: getDarkColor(),
                   ),
                 ),
               ],
