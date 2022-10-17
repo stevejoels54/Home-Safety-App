@@ -193,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   return SizedBox(
                     height: MediaQuery.of(context).size.height,
                     child: const Center(
-                      child: ServerErrorCard(),
+                      child: NetworkErrorCard(),
                     ),
                   );
                 }

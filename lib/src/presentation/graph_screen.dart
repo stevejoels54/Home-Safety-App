@@ -80,6 +80,7 @@ class _GraphScreenState extends State<GraphScreen> {
           ),
           color: Colors.white,
         ),
+        width: MediaQuery.of(context).size.width,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -149,7 +150,7 @@ class _GraphScreenState extends State<GraphScreen> {
                     if (statusCode == 401) {
                       return const NoDataCard(
                         message:
-                            "No data available for this location. Please add data to this location.",
+                            "No data available, please install sensor at this location.",
                       );
                     } else {
                       return SizedBox(

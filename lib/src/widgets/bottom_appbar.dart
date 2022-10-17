@@ -11,7 +11,6 @@ class BottomAppbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-      //color: const Color(0xFF000080),
       color: Colors.black,
       elevation: 5,
       //notchMargin: 10,

@@ -7,7 +7,6 @@ import '../widgets/drawer.dart';
 import '../widgets/bottom_appbar.dart';
 import '../widgets/values_cards.dart';
 import '../widgets/no_data.dart';
-import '../widgets/server_error.dart';
 import 'dart:io';
 
 class ValuesScreen extends StatefulWidget {
@@ -93,7 +92,6 @@ class _ValuesScreenState extends State<ValuesScreen> {
               color: Colors.white,
             ),
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
             child: StreamBuilder(
               stream: dataStream,
               builder: (context, AsyncSnapshot<String> snapshot) {
@@ -126,12 +124,28 @@ class _ValuesScreenState extends State<ValuesScreen> {
                     );
                   }
                   if (status == 401) {
-                    return const NoDataCard(
-                      message:
-                          "No data available for this location. Please add data to this location.",
+                    return Container(
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(50),
+                          topRight: Radius.circular(50),
+                        ),
+                        color: Colors.white,
+                      ),
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                      child: const NoDataCard(
+                          message:
+                              "No data available, please install sensor at this location."),
                     );
                   } else {
-                    return const ServerErrorCard();
+                    return ValuesCards(
+                      temperature: "${setData['temperature']}",
+                      lpg: "${setData['lpg']}",
+                      smoke: "${setData['smoke']}",
+                      placename: widget.placename,
+                      networkError: "true",
+                    );
                   }
                 } else {
                   return ValuesCards(
