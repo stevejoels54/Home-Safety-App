@@ -30,9 +30,9 @@ class CustomCard extends StatelessWidget {
         return Colors.blue;
       }
     } else {
-      if (double.parse(value) >= 0 && double.parse(value) <= 10) {
+      if (double.parse(value) >= 0 && double.parse(value) < 11) {
         return Colors.green;
-      } else if (double.parse(value) > 10 && double.parse(value) <= 20) {
+      } else if (double.parse(value) > 11 && double.parse(value) <= 20) {
         return Colors.orange;
       } else {
         return Colors.red;
@@ -52,9 +52,9 @@ class CustomCard extends StatelessWidget {
         return const Color(0xFFCCE5FF);
       }
     } else {
-      if (double.parse(value) >= 0 && double.parse(value) <= 10) {
+      if (double.parse(value) >= 0 && double.parse(value) < 11) {
         return const Color(0xFFD4EDDA);
-      } else if (double.parse(value) > 10 && double.parse(value) <= 20) {
+      } else if (double.parse(value) > 11 && double.parse(value) <= 20) {
         return const Color(0xFFFFF3CD);
       } else {
         return const Color(0xFFF8D7DA);
@@ -118,7 +118,7 @@ class CustomCard extends StatelessWidget {
                                             : "Low")))
                                 : title == "LPG"
                                     ? (((double.parse(value) >= 0) &&
-                                            (double.parse(value) <= 10))
+                                            (double.parse(value) < 11))
                                         ? "Normal"
                                         : ((double.parse(value) >= 11) &&
                                                 (double.parse(value) <= 20))
@@ -126,7 +126,7 @@ class CustomCard extends StatelessWidget {
                                             : "Very High")
                                     : title == "SMOKE"
                                         ? (((double.parse(value) >= 0) &&
-                                                (double.parse(value) <= 10))
+                                                (double.parse(value) < 11))
                                             ? "Normal"
                                             : ((double.parse(value) >= 11) &&
                                                     (double.parse(value) <= 20))
@@ -167,7 +167,7 @@ class CustomCard extends StatelessWidget {
                         "${double.parse(value).toStringAsFixed(1)}" "$unit",
                         style: TextStyle(
                           color: getDarkColor(),
-                          fontSize: 16,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                         )),
                     progressColor: getDarkColor(),

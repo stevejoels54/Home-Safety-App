@@ -38,9 +38,9 @@ List<ChartLayer> layers(List data, String value) {
         for (var i = 0; i < data.length; i++)
           ChartBarDataItem(
             color: value == "temperature"
-                ? Colors.yellowAccent
+                ? Colors.yellow
                 : value == "lpg"
-                    ? Colors.orangeAccent
+                    ? Colors.orange
                     : value == "smoke"
                         ? Colors.green
                         : Colors.black,
